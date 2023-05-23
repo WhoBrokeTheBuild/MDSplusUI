@@ -1,0 +1,115 @@
+<html>
+<head>
+    <title>MDS++</title>
+    <script>
+        
+        shotDB = [
+            {
+                "shot": 1090909006,
+                "run": 1090909,
+                "year": 2009,
+                "month": 9,
+                "day": 9,
+                "series": 6,
+                "ipmax": 1009400.0,
+                "t_ipmax": 0.7731000185012817,
+                "pulse_length": 1.9586999416351318
+            },
+            {
+                "shot": 1090909006,
+                "run": 1090909,
+                "year": 2009,
+                "month": 9,
+                "day": 9,
+                "series": 10,
+                "ipmax": 1206660.0,
+                "t_ipmax": 0.9944999814033508,
+                "pulse_length": 1.95169997215271
+            }
+        ]
+        
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@500&display=swap" rel="stylesheet">
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .header {
+            border-bottom: 1px solid #666;
+            font-size: 30px;
+            padding: 10px;
+            font-family: 'Saira Semi Condensed';
+        }
+        .logo {
+            font-weight: bold;
+        }
+        .nav {
+            padding: 0 5px;
+            opacity: 0.6;
+            cursor: pointer;
+        }
+        .nav-active,
+        .nav:hover {
+            opacity: 1.0;
+        }
+        .nav-right {
+            float: right;
+        }
+        
+        #explorer {
+            
+        }
+        .sidebar {
+            width: 280px;
+            height: 100%;
+            padding: 10px;
+            border-right: 1px solid #666;
+        }
+        .sidebar .search {
+            width: 100%;
+            padding: 10px;
+            font-size: 20px;
+        }
+        .sidebar h1 {
+            font-size: 20px;
+        }
+        .sidebar input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="logo">
+            <span style="color: #d1ad38">MDS</span><span style="color: #0c7b9d">plus</span>
+        </span>
+        <span class="nav nav-active">Explorer</span>
+        <span class="nav">Scope</span>
+        <span class="nav">Notebook</span>
+        <span class="nav-right">
+            <span class="nav">Manage</span>
+            <span class="nav">User</span>
+        </span>
+    </div>
+    <div id="explorer">
+        <div class="sidebar">
+            <form onsubmit="return false;">
+                <fieldset>
+                    <legend>Search</legend>
+                    <input class="search" id="search" type="text" />
+                    <br />
+                    <h1>Diagnostics</h1>
+                    <label title="D.N.B. ?" for="dnb">DNB</label><input id="dnb" type="checkbox">
+                    <label title="Lower Hybrid" for="lh">LH</label><input id="lh" type="checkbox">
+                    <input type="checkbox">
+                    <input type="checkbox">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
