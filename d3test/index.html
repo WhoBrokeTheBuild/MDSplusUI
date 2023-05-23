@@ -1,0 +1,124 @@
+<html>
+<head>
+    <title>D3.js Test</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        api_url = "http://127.0.0.1:5000/";
+        graph_margin = { top: 10, right: 30, bottom: 30, left: 60 };
+        graph_width = 500;
+        graph_height = 500;
+
+        window.onload = function() {
+            document.getElementById("do-graph").addEventListener("click", getData);
+        }
+
+        function graphData(e) {
+            response = JSON.parse(e.target.response);
+            console.log(response);
+
+            // response.data.dimension = [ 0.1, 0.2, 0.3, 0.4 ]
+            // response.data.values = [ 0, 1, 2, 3 ]
+
+            d3.select("#graph > svg").remove();
+
+            svg = d3.select("#graph")
+                .append("svg")
+                    .attr("width", graph_width + graph_margin.left + graph_margin.right)
+                    .attr("height", graph_height + graph_margin.top + graph_margin.bottom)
+                .append("g")
+                    .attr("transform",
+                        `translate(${graph_margin.left},${graph_margin.top})`);
+
+            console.log(d3.extent(response.data.dimension))
+            console.log(d3.extent(response.data.values))
+
+            x = d3.scaleLinear()
+                .domain(d3.extent(response.data.dimension))
+                .range([ 0, graph_width ]);
+            svg.append("g")
+                .attr("transform", `translate(0,${graph_height})`)
+                .call(d3.axisBottom(x));
+            
+            y = d3.scaleLinear()
+                .domain(d3.extent(response.data.values))
+                .range([ graph_height, 0 ]);
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            data_packed = []
+            for (i = 0; i < response.data.values.length; ++i) {
+                data_packed.push({
+                    time: response.data.dimension[i],
+                    value: response.data.values[i]
+                })
+            }
+            console.log(data_packed);
+
+            svg.append("path")
+                .datum(data_packed)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 1.5)
+                .attr("d", d3.line()
+                    .x(function(d) { return x(d.time); })
+                    .y(function(d) { return y(d.value); })
+                );
+        }
+
+        function getData() {
+            tree = document.getElementById("tree").value;
+            shot = document.getElementById("shot").value;
+            node = document.getElementById("node").value;
+            isTag = document.getElementById("is-tag").value;
+            startTime = document.getElementById("start-time").value;
+            endTime = document.getElementById("end-time").value;
+            // resample = document.getElementById("resample").value;
+
+            graph_width = document.getElementById("width").value
+
+            if (isTag) {
+                url = api_url + "/tree/" + tree + "/shot/" + shot + "/tag/" + node + "?graphWidth=" + graph_width;
+            }
+            else {
+                url = api_url + "/tree/" + tree + "/shot/" + shot + "/node/" + node + "?graphWidth=" + graph_width;
+            }
+
+            if (startTime != "") {
+                url += "&startTime=" + startTime;
+            }
+
+            if (endTime != "") {
+                url += "&endTime=" + endTime;
+            }
+            
+            request = new XMLHttpRequest();
+            request.addEventListener("load", graphData);
+            request.open("GET", url);
+            request.send();
+        }
+
+
+    </script>
+</head>
+<body>
+    <label for="tree">Tree: </label><input id="tree" type="text" value="cmod" />
+    <br />
+    <label for="shot">Shot: </label><input id="shot" type="number" value="1090909009" />
+    <br />
+    <label for="node">Node: </label><input id="node" type="text" value="IP" /> <label for="is-tag">Tag</label><input id="is-tag" type="checkbox" checked="checked" />
+    <br />
+    <label for="start-time">Start Time: </label><input id="start-time" type="number" value="" />
+    <br />
+    <label for="end-time">End Time: </label><input id="end-time" type="number" value="" />
+    <br />
+    <label for="width">Width: </label><input id="width" type="number" value="500" />
+    <br />
+    <!--
+    <label for="resample">Resample: </label><input id="resample" type="text" value="10" />
+    <br />
+    -->
+    <button id="do-graph">Graph</button>
+    <br />
+    <div id="graph"></div>
+</body>
+</html>
